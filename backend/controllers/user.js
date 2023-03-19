@@ -176,18 +176,17 @@ exports.resetPassword = async  (req, res) => {
     res.json({message: 'Password reset successfully!'});
 };
 
-exports.signIn = async (req, res) => {
+exports.signIn = async (req, res,) => {
     const {email, password} = req.body;
+
     const user = await User.findOne({email});
-
-
     if(!user) return sendError(res, 'Email or password not correct', );
 
-    const matched = user.comparePassword(password);
+    const matched = await user.comparePassword(password);
     if(!matched) return sendError(res, 'Email or password not correct');
 
     const {_id, name} = user;
-    const jwtToken = jwt.sign({userId: _id}, 'dfgdfgd87jkgfdsdfg43534', {expiresIn: '1d'});
+    const jwtToken = jwt.sign({userId: _id}, process.env.JWT_SECRET, {expiresIn: '1d'});
 
     res.json({user: {id: _id}, name, email, token: jwtToken})
 };
