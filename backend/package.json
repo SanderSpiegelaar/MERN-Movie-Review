@@ -2,7 +2,7 @@
   "name": "mern-movie-review-app",
   "version": "0.0.1",
   "description": "MERN Movie Review App to learn the MERN Stack",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/SanderSpiegelaar/MERN-Movie-Review/issues"
   },
-  "homepage": "https://github.com/SanderSpiegelaar/MERN-Movie-Review#readme"
+  "homepage": "https://github.com/SanderSpiegelaar/MERN-Movie-Review#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
