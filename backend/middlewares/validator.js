@@ -27,6 +27,16 @@ exports.userCreateValidator = [
         .withMessage('Password must be at least 6 characters long!'),
 ];
 
+exports.validatePassword = [
+    check('password')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Password is missing!')
+        .isLength({min: 6})
+        .withMessage('Password must be at least 6 characters long!'),
+];
+
 exports.validateUser = (req, res, next) => {
     const error = validationResult(req).array();
     if(error.length){

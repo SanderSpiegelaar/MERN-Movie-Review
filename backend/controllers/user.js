@@ -1,9 +1,9 @@
 const User = require('../models/user');
 const EmailVerificationToken = require('../models/emailVerificationToken');
-const nodeMailer = require('nodemailer');
 const {isValidObjectId} = require("mongoose");
+const PasswordResetToken = require('../models/passwordResetToken');
 const {generateOTP, generateMailTransporter} = require("../utils/mail");
-const {sendError} = require("../utils/helper");
+const {sendError, generateRandomByte} = require("../utils/helper");
 
 exports.create = async (req, res) => {
     const {name, email, password} = req.body;
@@ -108,4 +108,51 @@ exports.resendOTP = async (req, res) => {
     });
 
     res.json({message: 'New OTP sent to your email!'});
+};
+
+exports.forgetPassword = async (req, res) => {
+    const {email} = req.body;
+
+    if(!email) return sendError(res, 'Email is required');
+
+    const user = await User.findOne({email});
+    if(!user) return sendError(res, 'User not found', 404);
+
+    const tokenExists = await PasswordResetToken.findOne({owner: user._id});
+    if(tokenExists) return sendError(res, 'Token is not expired yet (tokens are valid for 60 minutes)');
+
+    const token = await generateRandomByte();
+    const newPasswordResetToken = await PasswordResetToken({owner: user._id, token});
+    await newPasswordResetToken.save();
+
+    const resetPasswordUrl = `http://localhost:3000/reset-password?token=${token}&id=${user._id}`;
+
+    const transport = generateMailTransporter();
+    transport.sendMail({
+        from: 'reset-paswword@mern-movie-review.com',
+        to: user.email,
+        subject: 'Reset password link',
+        html: `
+            <div style="text-align: center">
+                <h1>Reset password</h1>
+                <p>Click the link below to reset your password</p>
+                <a href="${resetPasswordUrl}">Reset Password</a>
+            </div>
+        `
+    });
+
+    res.json({message: 'Reset password link sent to your email!'});
+};
+
+exports.sendResetPasswordTokenStatus = async  (req, res) => {
+    res.json({ valid: true })
+};
+
+exports.resetPassword = async  (req, res) => {
+    const {newPassword, userId} = req.body;
+    const user = await User.findById(userId);
+    const matched = user.comparePassword(newPassword);
+
+    if(matched) return sendError(res, 'New password cannot be same as old password');
+
 };
