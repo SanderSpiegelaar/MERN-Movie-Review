@@ -1,0 +1,19 @@
+{
+  "name": "mern-movie-review-app",
+  "version": "0.0.1",
+  "description": "MERN Movie Review App to learn the MERN Stack",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanderSpiegelaar/MERN-Movie-Review.git"
+  },
+  "author": "Sander Spiegelaar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SanderSpiegelaar/MERN-Movie-Review/issues"
+  },
+  "homepage": "https://github.com/SanderSpiegelaar/MERN-Movie-Review#readme"
+}
