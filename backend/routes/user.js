@@ -5,17 +5,22 @@ const {
     resendOTP,
     forgetPassword,
     sendResetPasswordTokenStatus,
-    resetPassword } = require("../controllers/user");
+    resetPassword,
+    signIn
+} = require("../controllers/user");
 const {
     userCreateValidator,
     validateUser,
-    validatePassword } = require("../middlewares/validator");
+    validatePassword,
+    signInValidator
+} = require("../middlewares/validator");
 const {verifyPasswordResetToken} = require("../middlewares/user");
 
 const router = express.Router();
 
 // User related routes
 router.post('/create', userCreateValidator, validateUser, create);
+router.post('/sign-in', signInValidator, signIn);
 router.post('/verify-email', userCreateValidator, verifyEmail);
 router.post('/resend-email-verification-token', resendOTP);
 router.post('/forget-password', forgetPassword);

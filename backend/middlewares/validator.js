@@ -28,6 +28,21 @@ exports.userCreateValidator = [
 ];
 
 exports.validatePassword = [
+    check('newPassword')
+        .trim()
+        .not()
+        .isEmpty()
+        .withMessage('Password is missing!')
+        .isLength({min: 6})
+        .withMessage('Password must be at least 6 characters long!'),
+];
+
+exports.signInValidator = [
+    check('email')
+        .normalizeEmail()
+        .isEmail()
+        .withMessage('Email is invalid!'),
+
     check('password')
         .trim()
         .not()
